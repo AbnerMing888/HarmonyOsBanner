@@ -1,13 +1,6 @@
 # HarmonyOsBanner
 
-<p align="center">此项目不在giee维护，于2024年5月24日转移至github，请注意！</p>
-<p align="center">此项目不在giee维护，于2024年5月24日转移至github，请注意！！</p>
-<p align="center">此项目不在giee维护，于2024年5月24日转移至github，请注意！！！</p>
-<p align="center"><a href="https://github.com/AbnerMing888/HarmonyOsBanner">github地址</a></p>
-
-
 HarmonyOsBanner是一个基于系统Api的Swiper而封装的一个轮播图，旨在简化代码，扩展相关功能。
-
 
 <p align="center">
 <img src="https://vipandroid-image.oss-cn-beijing.aliyuncs.com/harmony/banner/banner_243_01.jpeg" width="200px" />
@@ -36,14 +29,14 @@ ohpm install @abner/banner
 方式二：在工程的oh-package.json5中设置三方包依赖，配置示例如下：
 
 ```
-"dependencies": { "@abner/banner": "^1.0.0"}
+"dependencies": { "@abner/banner": "^1.0.1"}
 ```
 
 <p align="center"><img src="https://vipandroid-image.oss-cn-beijing.aliyuncs.com/harmony/banner/banner_243_001.jpg" width="300"></p>
 
 ### 2、本地静态共享包har包使用
 
-<p>首先，下载har包，<a href="https://vipandroid-image.oss-cn-beijing.aliyuncs.com/harmony/banner/banner-1.0.0.har">点击下载</a></p>
+<p>首先，下载har包，<a href="https://vipandroid-image.oss-cn-beijing.aliyuncs.com/harmony/banner/banner-1.0.1.har">点击下载</a></p>
 <p>下载之后，把har包复制项目中，目录自己创建，如下，我创建了一个libs目录，复制进去</p>
 <p><img src="https://vipandroid-image.oss-cn-beijing.aliyuncs.com/harmony/banner/banner_243_002.jpg"></p>
 <p>引入之后，进行同步项目，点击Sync Now即可，当然了你也可以，将鼠标放置在报错处会出现提示，在提示框中点击Run 'ohpm install'。</p>
@@ -63,22 +56,22 @@ ohpm install @abner/banner
 
 ```typescript
 Banner({
-          data: ["1", "2", "3", "4", "5", "6"],
-          itemPage: this.itemPage,
+          data: ["1", "2", "3", "4", "5", "6"],//数据源，任意类型
+          itemPage: this.itemPage,//轮播组件 @Builder
           onChange: (position) => {
-            console.log("=========" + position)
+            //页面改变回调
           }
-        }).margin({ top: 20 })
+        })
 ```
 
 ### 2、圆点指示器
 
 ```typescript
 Banner({
-          data: ["1", "2", "3", "4", "5", "6"],
-          itemPage: this.itemPage,
+          data: ["1", "2", "3", "4", "5", "6"],//数据源，任意类型
+          itemPage: this.itemPage,//轮播组件 @Builder
           onChange: (position) => {
-            console.log("=========" + position)
+            //页面改变回调
           },
           indicator: new DotIndicator()
             .itemWidth(8)
@@ -87,17 +80,17 @@ Banner({
             .selectedItemHeight(8)
             .color(Color.Gray)
             .selectedColor(Color.Blue),
-        }).margin({ top: 20 })
+        })
 ```
 
 ### 3、文字指示器
 
 ```typescript
 Banner({
-          data: ["1", "2", "3", "4", "5", "6"],
-          itemPage: this.itemPage,
+          data: ["1", "2", "3", "4", "5", "6"],//数据源，任意类型
+          itemPage: this.itemPage,//轮播组件 @Builder
           onChange: (position) => {
-            console.log("=========" + position)
+            //页面改变回调
           },
           indicator: Indicator.digit()// 设置数字导航点样式
             .right("43%")
@@ -106,59 +99,224 @@ Banner({
             .selectedFontColor(Color.Gray)
             .digitFont({ size: 16, weight: FontWeight.Bold })
             .selectedDigitFont({ size: 16, weight: FontWeight.Normal })
-        }).margin({ top: 20 })
+        })
 ```
 
 ### 4、线条指示器
 
 ```typescript
 Banner({
-          data: ["1", "2", "3", "4", "5", "6"],
-          itemPage: this.itemPage,
+          data: ["1", "2", "3", "4", "5", "6"],//数据源，任意类型
+          itemPage: this.itemPage,//轮播组件 @Builder
           isLineIndicator: true,
           lineMargin: { bottom: 10, left: 10 },
           indicatorType: IndicatorType.bottomCenter,
           onChange: (position) => {
-            console.log("=========" + position)
+            //页面改变回调
           }
-        }).margin({ top: 20 })
+        })
+
+
 ```
 
-### itemPage
+
+### 5、相关属性
+
+| 属性                   | 类型                                                 | 概述                    |
+|----------------------|----------------------------------------------------|-----------------------|
+| data                 | Array<BannerData>                                  | 数据源                   |
+| itemPage             | 回调方法BuilderParam (index: number, item: BannerData) | tab对应的页面              |
+| onChange             | 回调方法(position: number)                             | 页面改变                  |
+| bannerHeight         | Length                                             | banner高度              |
+| bannerWidth          | Length                                             | banner宽度              |
+| autoPlay             | boolean                                            | 是否自动播放，默认false        |
+| interval             | number                                             | 默认3秒轮播一次              |
+| disableSwipe         | boolean                                            | 是否禁止滑动                |
+| itemSpace            | number                                             | 子组件之间的间隙              |
+| currentIndex         | number                                             | 索引                    |
+| indicator            | DotIndicator / DigitIndicator/ boolean             | 指示器                   |
+| isLineIndicator      | boolean                                            | 是否是自定义的线条指示器          |
+| indicatorType        | IndicatorType                                      | 默认底部居中                |
+| lineIndicatorWidth   | number                                             | 线条宽度                  |
+| lineIndicatorHeight  | number                                             | 线条高度                  |
+| lineIndicatorBgColor | ResourceColor                                      | 指示器背景                 |
+| lineMargin           | Margin / Length                                    | 线条边距                  |
+| isLoop               | boolean                                            | 是否开启循环,默认是循环          |
+| customIndicator      | BuilderParam(index: number, item: Object)          | 自定义轮播指示器              |
+| isLazyData           | boolean                                            | 是否使用数据懒加载，默认false,不使用 |
+| lazyCachedCount      | number                                             | 默认懒加载缓存数量             |
+| onLazyDataSource     | (dataSource: BannerDataSource)                     | 懒加载数据操作对象回调           |
+| dataController       | DataController                                     | 普通数据操作控制器，和懒加载二者选其一   |
+
+
+### 6、轮播图数据操作（增删改查）
+
+【Demo案例可直接查看DataBannerPage和LazyBannerPage两个页面】
+
+无论是懒加载数据方式还是普通加载方式，均提供了数据之间的操作，普通数据直接可以针对传递的数组进行操作，需要自己拿到
+数组，直接对数组更改即可，懒加载方式需要获取BannerDataSource，进行数据操作。
+
+新的语言，对于一些小伙伴而言，在系统Api数据操作上可能略有阻碍，为了更好，更便捷的让大家使用，自1.0.1版本之后，对懒加载数据和普通数据做了优化和拓展。
+
+大家只关注两个类即可，普通数据列表使用DataController，懒加载数据列表继续使用BannerDataSource。
+
+#### 普通数据列表操作
+
+定义DataController全局变量，并传入轮播组件。
+
+
+```typescripty
+
+dataController: DataController = new DataController() //数据控制器
+
+Banner({
+        data: this.items,//数据源，任意类型
+        dataController: this.dataController,
+        itemPage: this.itemPage,
+        onChange: (position) => {
+          //页面滑动监听
+        }
+      })
+      
+```
+
+相关方法如下,支持任意类型数据，如下我定义的是number
 
 ```typescript
-  @Builder
-  itemPage(index: number, item: BannerData) {
-    Column() {
-      Text("item" + index)
-    }.backgroundColor(Color.Pink)
-    .justifyContent(FlexAlign.Center)
-    .borderRadius(10)
-    .margin({ left: 20, right: 20 })
-  }
+ //增加一个数据
+ this.dataController.add(100)
+//指定位置增加一个数据
+this.dataController.addPosition(2, 999)
+//数组添加
+ this.dataController.addArray([200, 300, 400])
+ //可变参数形式添加
+this.dataController.addVariable(600, 700)
+//删除第一个
+this.dataController.deleteFirst()
+//删除最后一个
+this.dataController.deleteLast()
+//删除指定一个
+this.dataController.deleteData(2)
+//删除全部
+this.dataController.deleteAll()
+//修改某一条数据
+this.dataController.change(6, 1000)
 ```
-### 相关属性
 
-| 属性                   | 类型                                                 | 概述             |
-|----------------------|----------------------------------------------------|----------------|
-| data                 | Array<BannerData>                                  | 数据源            |
-| itemPage             | 回调方法BuilderParam (index: number, item: BannerData) | tab对应的页面       |
-| onChange             | 回调方法(position: number)                             | 页面改变           |
-| bannerHeight         | Length                                             | banner高度       |
-| bannerWidth          | Length                                             | banner宽度       |
-| autoPlay             | boolean                                            | 是否自动播放，默认false |
-| interval             | number                                             | 默认3秒轮播一次       |
-| disableSwipe         | boolean                                            | 是否禁止滑动         |
-| itemSpace            | number                                             | 子组件之间的间隙       |
-| currentIndex         | number                                             | 索引             |
-| indicator            | DotIndicator / DigitIndicator/ boolean             | 指示器            |
-| isLineIndicator      | boolean                                            | 是否是自定义的线条指示器   |
-| indicatorType        | IndicatorType                                      | 默认底部居中         |
-| lineIndicatorWidth   | number                                             | 线条宽度           |
-| lineIndicatorHeight  | number                                             | 线条高度           |
-| lineIndicatorBgColor | ResourceColor                                      | 指示器背景          |
-| lineMargin           | Margin / Length                                    | 线条边距           |
-| isLoop               | boolean                                            | 是否开启循环,默认是循环   |
+##### DataController方法介绍
+
+
+| 方法          | 参数                               | 概述                    |
+|-------------|----------------------------------|-----------------------|
+| add         | (item: Object )                  | 可传递任意类型，用于添加单条数据      |
+| addPosition | (position: number, item: Object) | 指定位置添加数据              |
+| addVariable | (...items: Object[])             | 添加可变参数数据              |
+| addArray    | items: Object[]                  | 添加数组                  |
+| deleteFirst | 无参                               | 删除第一条数据               |
+| deleteLast  | 无参                               | 删除最后一条数据              |
+| deleteData  | (position: number)               | 删除一条数据                |
+| deleteAll   | 无参                               | 删除全部数据                |
+| changeData  | (position: number, item: Object) | 修改数据                  |
+| getDataAll  | 无参                               | 返回所有的数据 （返回值Object[]） |
+| getData     | (index: number)                  | 返回某一条数据               |
+| totalCount  | 无参                               | 返回数据数量（返回值number      |
+
+
+#### 懒加载数据列表操作
+
+定义BannerDataSource全局变量，并传入轮播组件之中。
+
+
+```typescript
+dataSource: BannerDataSource = new BannerDataSource() //数据懒加载操作对象，执行数据增删改查
+
+Banner({
+  data: this.items,
+  itemPage: this.itemPage,
+  isLazyData: true,
+  onLazyDataSource: (dataSource: BannerDataSource) => {
+    this.dataSource = dataSource
+  },
+  onChange: (position) => {
+    //页面改变
+  }
+})
+
+```
+
+相关方法如下：
+
+```typescript
+//增加一个
+this.dataSource.pushData(100)
+//指定位置增加一个
+this.dataSource.pushDataPosition(2, 200)
+//数组添加
+this.dataSource.pushDataArray([300, 301, 302])
+ //可变参数形式添加
+this.dataSource.pushDataVariable(400, 401, 402)
+ //删除第一个
+this.dataSource.deleteFirst()
+ //删除最后一个
+this.dataSource.deleteLast()
+//删除指定一个
+this.dataSource.deleteData(2)
+ //删除全部
+this.dataSource.deleteAll()
+//修改数据
+this.dataSource.changeData(3, 9999)
+```
+
+##### BannerDataSource方法介绍
+
+
+| 方法               | 参数                               | 概述                    |
+|------------------|----------------------------------|-----------------------|
+| pushData         | (item: Object )                  | 可传递任意类型，用于添加单条数据      |
+| pushDataPosition | (position: number, item: Object) | 指定位置添加数据              |
+| pushDataVariable | (...items: Object[])             | 添加可变参数数据              |
+| pushDataArray    | items: Object[]                  | 添加数组                  |
+| deleteFirst      | 无参                               | 删除第一条数据               |
+| deleteLast       | 无参                               | 删除最后一条数据              |
+| deleteData       | (position: number)               | 删除一条数据                |
+| deleteAll        | 回调接口                             | 参数可选，删除全部数据           |
+| changeData       | (position: number, item: Object) | 修改数据                  |
+| getDataAll       | 无参                               | 返回所有的数据 （返回值Object[]） |
+| getData          | (index: number)                  | 返回某一条数据               |
+| totalCount       | 无参                               | 返回数据数量（返回值number      |
+
+## 更多案例
+
+可以查看相关Demo【右侧仓库地址】。
+
+## 关注公众号
+
+鸿蒙先驱者，只分享精华的鸿蒙或者移动端技术文章，可微信扫码关注
+
+<p><img src="https://vipandroid-image.oss-cn-beijing.aliyuncs.com/harmony/abner.jpg" width="150px" /></p>
+
+
+[鸿蒙精华技术文章列表](https://juejin.cn/column/7269566781248389178)
+
+## 一对一指导【收费】
+
+每个人的时间都是宝贵的，做为开发者的我，已经做到了技术上的免费开源，但仍然有很多问题无法做到及时处理。
+也考虑到，鸿蒙是一个新的系统，大家在使用上会遇到各种各样的问题，也为了能够及时的解决及回复问题，大家可以付费进行一对一指导。
+
+### 开源库使用指导
+
+<p><img src="https://vipandroid-image.oss-cn-beijing.aliyuncs.com/harmony/h_github_9.png" width="150px" /></p>
+
+**重要信息：一定要在付款时备注您的微信号，我会主动加您！切记！切记！！切记！！！**
+**诚信经营，来自一个北漂的老程序员心声！**
+
+**一杯饮料的钱，您可以获取权益如下**
+
+- 1、针对Banner库使用1对1辅导使用，并跟踪相关问题排查。
+- 2、针对我的所有鸿蒙开源库，1对1辅导使用，并跟踪相关问题排查。
+- 3、涉及到我的开源库，您提的业务需求，率先第一时间满足，并及时针对性开发。
+- 4、未来我的鸿蒙开源库，可先遣体验。
+- 5、鸿蒙脚手架，正在研发中，可首批次体验使用。
 
 ## License
 
