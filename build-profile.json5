@@ -33,6 +33,10 @@
           ]
         }
       ]
+    },
+    {
+      "name": "banner",
+      "srcPath": "./banner"
     }
   ]
 }
