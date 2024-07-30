@@ -19,7 +19,7 @@ export struct Banner {
   interval: number = 3000 //默认3秒轮播一次
   disableSwipe: boolean = false //是否禁止滑动
   itemSpace: number = 0 //子组件之间的间隙
-  @State currentIndex: number = 0 //默认选中第0个
+  @Prop currentIndex: number = 0 //默认选中第0个
   indicator: DotIndicator | DigitIndicator | boolean = true //指示器
   isLineIndicator: boolean = false //是否是自定义的线条指示器
   indicatorType: IndicatorType = IndicatorType.bottomCenter //默认底部居中
@@ -39,6 +39,18 @@ export struct Banner {
   lazyCachedCount: number = 1 //默认缓存数量
   onLazyDataSource?: (dataSource: BannerDataSource) => void
   dataController: DataController = new DataController() //数据控制器
+  displayMode?: SwiperDisplayMode
+  prevMargin?: Length
+  nextMargin?: Length
+  isLeftRightScale?: boolean = false //左右是否缩小
+  @State currentScale: number = 1
+  @State otherScale: number = 0.85
+  scaleItemWidth: number = 0
+  @State scaleDuration?: number = 0
+  @State _selectCurrentIndex: number = 0
+  displayCountValue?: number | string | SwiperAutoFill
+  displayCountSwipeByGroup?: boolean
+  customContentTransition?: SwiperContentAnimatedTransition
 
   /*
  * Author:AbnerMing
@@ -49,6 +61,7 @@ export struct Banner {
   }
 
   aboutToAppear(): void {
+
     if (this.isLineIndicator || this.customIndicator != null) {
       this.indicator = false
     }
@@ -134,15 +147,39 @@ export struct Banner {
   }
 
   @Builder
+  swiperItemLayout(_this: Banner, index: number, item: Object) {
+    if (_this.isLeftRightScale) {
+      //需要缩放动画
+      Stack() {
+        this.itemPage(index, item)
+      }
+      .height(this.bannerHeight)
+      .width(this.bannerWidth)
+      .scale({ x: 1, y: _this._selectCurrentIndex == index ? _this.currentScale : _this.otherScale })
+      .animation({
+        duration: _this.scaleDuration, onFinish: () => {
+          _this.scaleDuration = 0
+        }
+      })
+      .onAreaChange((_: Area, newValue: Area) => {
+        this.scaleItemWidth = Number(newValue.width)
+      })
+
+    } else {
+      this.itemPage(index, item)
+    }
+  }
+
+  @Builder
   getSwiperItem() {
     //判断是否是懒加载
     if (this.isLazyData) {
       LazyForEach(this._lazyData, (item: Object, index: number) => {
-        this.itemPage(index, item)
+        this.swiperItemLayout(this, index, item)
       }, (item: Object, index: number) => JSON.stringify(item) + "_" + index)
     } else {
       ForEach(this.data, (item: Object, index: number) => {
-        this.itemPage(index, item)
+        this.swiperItemLayout(this, index, item)
       }, (item: Object, index: number) => JSON.stringify(item) + "_" + index)
     }
   }
@@ -152,6 +189,67 @@ export struct Banner {
       Swiper(this._privateSwiperController) {
         this.getSwiperItem()
       }
+      .onAnimationStart((index: number, targetIndex: number, _: SwiperAnimationEvent) => {
+        if (this._selectCurrentIndex != targetIndex && this.isLeftRightScale) {
+          this.scaleDuration = 100
+          this._selectCurrentIndex = targetIndex
+        }
+      })
+      .onTouch((event: TouchEvent) => {
+        if (event.type == TouchType.Up && this.isLeftRightScale) {
+          this.scaleDuration = 200
+          this.currentScale = 1
+          this.otherScale = 0.85
+        }
+      })
+      .onGestureSwipe((index: number, extraInfo: SwiperAnimationEvent) => {
+        if (!this.isLeftRightScale) {
+          return
+        }
+        let offsetRight = extraInfo.currentOffset - this.itemSpace - Number(this.nextMargin)
+        let offsetLeft = extraInfo.currentOffset - this.itemSpace - Number(this.prevMargin)
+        if (offsetRight < 0) {
+          //右滑动
+          let size = Math.abs(offsetRight) / this.scaleItemWidth!
+          if (this.currentScale > 0.85) {
+            this.currentScale = 1 - (size * 0.5)
+          }
+          if (this.otherScale < 1) {
+            this.otherScale = 0.85 + (size * 0.5)
+          }
+          //大于一半，进行加1
+          if (size > 0.5) {
+            this.currentScale = 1
+            this.otherScale = 0.85
+            //大于最后一个位置
+            if (index == this.data.length - 1) {
+              index = -1
+            }
+            this._selectCurrentIndex = index + 1
+          }
+        }
+
+        if (offsetLeft > 0) {
+          //往左滑动
+          let size = Math.abs(offsetLeft) / this.scaleItemWidth!
+          if (this.currentScale > 0.85) {
+            this.currentScale = 1 - (size * 0.5)
+          }
+          if (this.otherScale < 1) {
+            this.otherScale = 0.85 + (size * 0.5)
+          }
+          //大于一半，进行减1
+          if (size > 0.5) {
+            //小于第一个位置
+            this.currentScale = 1
+            this.otherScale = 0.85
+            if (index == 0) {
+              index = this.data.length
+            }
+            this._selectCurrentIndex = index - 1
+          }
+        }
+      })
       .onChange((position) => {
         //当前位置
         this.currentIndex = position
@@ -171,9 +269,14 @@ export struct Banner {
       .loop(this.isLoop)
       .cachedCount(this.lazyCachedCount)
       .id("swiper")
+      .displayMode(this.displayMode)
+      .prevMargin(this.prevMargin)
+      .nextMargin(this.nextMargin)
+      .displayCount(this.displayCountValue, this.displayCountSwipeByGroup)
+      .customContentTransition(this.customContentTransition)
 
+      //线条指示器
       if (this.isLineIndicator) {
-        //线条指示器
         Row() {
           ForEach(this.data, (_: Object, index: number) => {
             Line().width(this.lineIndicatorWidth / this.data.length)

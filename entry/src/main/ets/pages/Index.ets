@@ -1,6 +1,5 @@
 import { Banner, IndicatorType } from '@abner/banner'
 import { ActionBar } from './ActionBar'
-import router from '@ohos.router'
 
 @Entry
 @Component
@@ -9,31 +8,78 @@ struct Index {
   itemPage(index: number, item: Object) {
     Column() {
       Text("item" + index)
-    }.backgroundColor(Color.Pink)
+    }
+    .backgroundColor(Color.Pink)
     .justifyContent(FlexAlign.Center)
     .borderRadius(10)
+    .width("100%")
+    .height("100%")
     .margin({ left: 20, right: 20 })
+  }
+
+  @Builder
+  bottomItemPage(index: number, item: Object) {
+    Column() {
+      Column() {
+        Text("item" + index)
+      }
+      .backgroundColor(Color.Pink)
+      .justifyContent(FlexAlign.Center)
+      .borderRadius(10)
+      .width("100%")
+      .height(120)
+
+      Column().height(30)
+    }.margin({ left: 20, right: 20 })
+  }
+
+  @State selectPosition: number = 0
+
+  @Builder
+  itemMarginPage(index: number, item: Object) {
+    Column() {
+      Text("item" + index)
+    }
+    .width("100%")
+    .height("100%")
+    .backgroundColor(Color.Pink)
+    .justifyContent(FlexAlign.Center)
+    .borderRadius(10)
   }
 
   build() {
     Column() {
-      ActionBar({ title: "普通轮播图", hiddenBack: true })
-      Row() {
-        Button("数据操作")
-          .onClick(() => {
-            router.pushUrl({ url: "pages/DataBannerPage" })
-          })
-        Button("懒加载")
-          .onClick(() => {
-            router.pushUrl({ url: "pages/LazyBannerPage" })
-          })
-      }.margin({ top: 10 })
-
+      ActionBar({ title: "轮播图", hiddenBack: true, hiddenRight: false })
       Scroll() {
         Column() {
+          // 左右显示，两边缩小，滑动到中间变大
+          Banner({
+            data: ["1", "2", "3", "4", "5", "6"],
+            itemPage: this.itemMarginPage,
+            nextMargin: 20,
+            prevMargin: 20,
+            itemSpace: 10, //子组件边距
+            isLeftRightScale: true,
+            onChange: (position) => {
+              this.selectPosition = position
+              console.log("=========" + position)
+            }
+          }).margin({ top: 20 })
+
+          //普通加载
           Banner({
             data: ["1", "2", "3", "4", "5", "6"],
             itemPage: this.itemPage,
+            onChange: (position) => {
+              console.log("=========" + position)
+            }
+          }).margin({ top: 20 })
+
+          // 指示器
+          Banner({
+            data: ["1", "2", "3", "4", "5", "6"],
+            itemPage: this.bottomItemPage,
+            bannerHeight: 150,
             onChange: (position) => {
               console.log("=========" + position)
             }

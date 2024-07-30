@@ -6,7 +6,7 @@
   "author": "",
   "license": "",
   "dependencies": {
-    "@abner/banner": "file:libs/banner-1.0.1.har"
+    "@abner/banner": "file:./libs/banner-1.0.2.har"
   }
 }
 

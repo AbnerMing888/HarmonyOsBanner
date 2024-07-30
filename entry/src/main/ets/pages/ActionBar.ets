@@ -9,6 +9,7 @@ import router from '@ohos.router'
 export struct ActionBar {
   @State title: string = "标题"
   @State hiddenBack: boolean = false
+  @State hiddenRight: boolean = true
 
   build() {
     Stack() {
@@ -31,6 +32,24 @@ export struct ActionBar {
           //销毁
           router.back()
         })
+
+      Row() {
+        Text("普通加载")
+          .fontColor(Color.White)
+          .fontSize(16)
+          .onClick(() => {
+            router.pushUrl({ url: "pages/DataBannerPage" })
+          })
+        Text("懒加载")
+          .fontColor(Color.White)
+          .fontSize(16)
+          .margin({ left: 10, right: 10 })
+          .onClick(() => {
+            router.pushUrl({ url: "pages/LazyBannerPage" })
+          })
+      }.width("100%")
+      .justifyContent(FlexAlign.End)
+      .visibility(this.hiddenRight ? Visibility.Hidden : Visibility.Visible)
     }.height(44)
     .width("100%")
     .backgroundColor("#ff0000")

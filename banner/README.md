@@ -1,9 +1,16 @@
 # HarmonyOsBanner
 
-HarmonyOsBanner是一个基于系统Api的Swiper而封装的一个轮播图，旨在简化代码，扩展相关功能。
+HarmonyOsBanner是一个基于系统Api的Swiper而封装的一个轮播图，旨在简化代码，扩展相关功能，使用非常简单！
+
+主要功能点如下
+
+- 1、**支持轮播图左右缩放效果滑动**
+- 2、**支持线条指示器**
+- 3、**支持系统常见的圆点、圆柱、文字等指示器**
+- 4、**支持懒加载数据便捷调用**
 
 <p align="center">
-<img src="https://vipandroid-image.oss-cn-beijing.aliyuncs.com/harmony/banner/banner_243_01.jpeg" width="200px" />
+<img src="https://vipandroid-image.oss-cn-beijing.aliyuncs.com/harmony/banner/banner_24_730.png" width="200px" />
 </p>
 
 ## 开发环境
@@ -29,14 +36,14 @@ ohpm install @abner/banner
 方式二：在工程的oh-package.json5中设置三方包依赖，配置示例如下：
 
 ```
-"dependencies": { "@abner/banner": "^1.0.1"}
+"dependencies": { "@abner/banner": "^1.0.2"}
 ```
 
 <p align="center"><img src="https://vipandroid-image.oss-cn-beijing.aliyuncs.com/harmony/banner/banner_243_001.jpg" width="300"></p>
 
 ### 2、本地静态共享包har包使用
 
-<p>首先，下载har包，<a href="https://vipandroid-image.oss-cn-beijing.aliyuncs.com/harmony/banner/banner-1.0.1.har">点击下载</a></p>
+<p>首先，下载har包，<a href="https://vipandroid-image.oss-cn-beijing.aliyuncs.com/harmony/banner/banner-1.0.2.har">点击下载</a></p>
 <p>下载之后，把har包复制项目中，目录自己创建，如下，我创建了一个libs目录，复制进去</p>
 <p><img src="https://vipandroid-image.oss-cn-beijing.aliyuncs.com/harmony/banner/banner_243_002.jpg"></p>
 <p>引入之后，进行同步项目，点击Sync Now即可，当然了你也可以，将鼠标放置在报错处会出现提示，在提示框中点击Run 'ohpm install'。</p>
@@ -119,8 +126,40 @@ Banner({
 
 ```
 
+### 5、左右显示，无缩放效果
 
-### 5、相关属性
+```typescript
+          Banner({
+            data: ["1", "2", "3", "4", "5", "6"],
+            itemPage: this.itemMarginPage,
+            nextMargin: 20,
+            prevMargin: 20,
+            itemSpace: 10, //子组件边距
+            onChange: (position) => {
+              console.log("=========" + position)
+            }
+          }).margin({ top: 20 })
+```
+
+### 6、左右显示，有缩放效果
+
+```typescript
+         Banner({
+  data: ["1", "2", "3", "4", "5", "6"],
+  itemPage: this.itemMarginPage,
+  nextMargin: 20,
+  prevMargin: 20,
+  itemSpace: 10, //子组件边距
+  isLeftRightScale: true,
+  onChange: (position) => {
+    this.selectPosition = position
+    console.log("=========" + position)
+  }
+}).margin({ top: 20 })
+```
+
+
+### 7、相关属性
 
 | 属性                   | 类型                                                 | 概述                    |
 |----------------------|----------------------------------------------------|-----------------------|
@@ -147,7 +186,9 @@ Banner({
 | lazyCachedCount      | number                                             | 默认懒加载缓存数量             |
 | onLazyDataSource     | (dataSource: BannerDataSource)                     | 懒加载数据操作对象回调           |
 | dataController       | DataController                                     | 普通数据操作控制器，和懒加载二者选其一   |
-
+| prevMargin           | Length                                             | 前边距，用于露出前一项的一小部分      |
+| nextMargin           | Length                                             | 后边距，用于露出后一项的一小部分      |
+| isLeftRightScale     | boolean                                            | 左右是否缩放                |
 
 ### 6、轮播图数据操作（增删改查）
 
