@@ -1,9 +1,0 @@
-{
-  "module": {
-    "name": "banner",
-    "type": "har",
-    "deviceTypes": [
-      "default"
-    ]
-  }
-}
