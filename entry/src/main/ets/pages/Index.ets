@@ -72,6 +72,9 @@ struct Index {
             itemPage: this.itemPage,
             onChange: (position) => {
               console.log("=========" + position)
+            },
+            onAnimationStart: (index: number, targetIndex: number) => {
+
             }
           }).margin({ top: 20 })
 

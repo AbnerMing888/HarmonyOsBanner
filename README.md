@@ -14,11 +14,11 @@ HarmonyOsBanner是一个基于系统Api的Swiper而封装的一个轮播图，�
 
 ## 开发环境
 
-DevEco Studio NEXT Developer Preview1,Build Version: 4.1.3.500
+DevEco Studio NEXT Developer Preview1,Build Version: 5.0.3.900
 
-Api版本：**11**
+Api版本：**12**
 
-hvigorVersion：4.0.2
+hvigorVersion：5.0.0
 
 ## 快速使用
 
@@ -35,7 +35,7 @@ ohpm install @abner/banner
 方式二：在工程的oh-package.json5中设置三方包依赖，配置示例如下：
 
 ```
-"dependencies": { "@abner/banner": "^1.0.2"}
+"dependencies": { "@abner/banner": "^1.0.3"}
 ```
 
 <p align="center"><img src="https://vipandroid-image.oss-cn-beijing.aliyuncs.com/harmony/banner/banner_243_001.jpg" width="300"></p>
