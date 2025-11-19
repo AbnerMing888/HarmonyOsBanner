@@ -7,6 +7,10 @@ struct LazyBannerPage {
   private dataSource: BannerDataSource = new BannerDataSource()
   @State private items: number[] = [1, 2, 3, 4, 5, 6]
 
+  aboutToAppear(): void {
+    this.dataSource.initData(this.items) //初始化数据
+  }
+
   @Builder
   itemPage(index: number, item: Object) {
     Column() {
@@ -21,12 +25,8 @@ struct LazyBannerPage {
     Column() {
       ActionBar({ title: "懒加载轮播图" })
       Banner({
-        data: this.items,
         itemPage: this.itemPage,
-        isLazyData: true,
-        onLazyDataSource: (dataSource: BannerDataSource) => {
-          this.dataSource = dataSource
-        },
+        dataSource: this.dataSource,
         onChange: (position) => {
           //页面改变
         }

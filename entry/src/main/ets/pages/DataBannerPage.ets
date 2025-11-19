@@ -1,4 +1,4 @@
-import { Banner, BannerDataSource, DataController } from '@abner/banner/Index';
+import { Banner, DataController } from '@abner/banner/Index';
 import { ActionBar } from './ActionBar';
 
 @Entry
@@ -6,6 +6,10 @@ import { ActionBar } from './ActionBar';
 struct DataBannerPage {
   private dataController: DataController = new DataController()
   @State private items: number[] = [1, 2, 3, 4, 5, 6]
+
+  aboutToAppear(): void {
+    this.dataController.init(this.items) //初始化数据
+  }
 
   @Builder
   itemPage(index: number, item: Object) {
@@ -21,7 +25,6 @@ struct DataBannerPage {
     Column() {
       ActionBar({ title: "普通轮播图数据操作" })
       Banner({
-        data: this.items,
         dataController: this.dataController,
         itemPage: this.itemPage,
         onChange: (position) => {

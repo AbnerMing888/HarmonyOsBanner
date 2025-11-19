@@ -1,4 +1,8 @@
 # HarmonyOsBanner
+<p align="center">
+<img src="https://vipandroid-image.oss-cn-beijing.aliyuncs.com/harmony/abner.jpg" width="100px" /><br/>
+<span style="font-size:12px;color:red;">扫码关注，千帆起航，共筑鸿蒙！</span>
+</p>
 HarmonyOsBanner是一个基于系统Api的Swiper而封装的一个轮播图，旨在简化代码，扩展相关功能，使用非常简单！
 
 主要功能点如下
@@ -12,13 +16,9 @@ HarmonyOsBanner是一个基于系统Api的Swiper而封装的一个轮播图，�
 <img src="https://vipandroid-image.oss-cn-beijing.aliyuncs.com/harmony/banner/banner_24_730.png" width="200px" />
 </p>
 
-## 开发环境
+## 支持Api
 
-DevEco Studio NEXT Developer Preview1,Build Version: 5.0.3.900
-
-Api版本：**12**
-
-hvigorVersion：5.0.0
+Api版本：**>12**
 
 ## 快速使用
 
@@ -35,7 +35,7 @@ ohpm install @abner/banner
 方式二：在工程的oh-package.json5中设置三方包依赖，配置示例如下：
 
 ```
-"dependencies": { "@abner/banner": "^1.0.3"}
+"dependencies": { "@abner/banner": "^1.0.6"}
 ```
 
 <p align="center"><img src="https://vipandroid-image.oss-cn-beijing.aliyuncs.com/harmony/banner/banner_243_001.jpg" width="300"></p>
@@ -62,65 +62,65 @@ ohpm install @abner/banner
 
 ```typescript
 Banner({
-          data: ["1", "2", "3", "4", "5", "6"],//数据源，任意类型
-          itemPage: this.itemPage,//轮播组件 @Builder
-          onChange: (position) => {
-            //页面改变回调
-          }
-        })
+  data: ["1", "2", "3", "4", "5", "6"], //数据源，任意类型
+  itemPage: this.itemPage, //轮播组件 @Builder
+  onChange: (position) => {
+    //页面改变回调
+  }
+})
 ```
 
 ### 2、圆点指示器
 
 ```typescript
 Banner({
-          data: ["1", "2", "3", "4", "5", "6"],//数据源，任意类型
-          itemPage: this.itemPage,//轮播组件 @Builder
-          onChange: (position) => {
-            //页面改变回调
-          },
-          indicator: new DotIndicator()
-            .itemWidth(8)
-            .itemHeight(8)
-            .selectedItemWidth(8)
-            .selectedItemHeight(8)
-            .color(Color.Gray)
-            .selectedColor(Color.Blue),
-        })
+  data: ["1", "2", "3", "4", "5", "6"], //数据源，任意类型
+  itemPage: this.itemPage, //轮播组件 @Builder
+  onChange: (position) => {
+    //页面改变回调
+  },
+  indicator: new DotIndicator()
+    .itemWidth(8)
+    .itemHeight(8)
+    .selectedItemWidth(8)
+    .selectedItemHeight(8)
+    .color(Color.Gray)
+    .selectedColor(Color.Blue),
+})
 ```
 
 ### 3、文字指示器
 
 ```typescript
 Banner({
-          data: ["1", "2", "3", "4", "5", "6"],//数据源，任意类型
-          itemPage: this.itemPage,//轮播组件 @Builder
-          onChange: (position) => {
-            //页面改变回调
-          },
-          indicator: Indicator.digit()// 设置数字导航点样式
-            .right("43%")
-            .top(200)
-            .fontColor(Color.Gray)
-            .selectedFontColor(Color.Gray)
-            .digitFont({ size: 16, weight: FontWeight.Bold })
-            .selectedDigitFont({ size: 16, weight: FontWeight.Normal })
-        })
+  data: ["1", "2", "3", "4", "5", "6"], //数据源，任意类型
+  itemPage: this.itemPage, //轮播组件 @Builder
+  onChange: (position) => {
+    //页面改变回调
+  },
+  indicator: Indicator.digit()// 设置数字导航点样式
+    .right("43%")
+    .top(200)
+    .fontColor(Color.Gray)
+    .selectedFontColor(Color.Gray)
+    .digitFont({ size: 16, weight: FontWeight.Bold })
+    .selectedDigitFont({ size: 16, weight: FontWeight.Normal })
+})
 ```
 
 ### 4、线条指示器
 
 ```typescript
 Banner({
-          data: ["1", "2", "3", "4", "5", "6"],//数据源，任意类型
-          itemPage: this.itemPage,//轮播组件 @Builder
-          isLineIndicator: true,
-          lineMargin: { bottom: 10, left: 10 },
-          indicatorType: IndicatorType.bottomCenter,
-          onChange: (position) => {
-            //页面改变回调
-          }
-        })
+  data: ["1", "2", "3", "4", "5", "6"], //数据源，任意类型
+  itemPage: this.itemPage, //轮播组件 @Builder
+  isLineIndicator: true,
+  lineMargin: { bottom: 10, left: 10 },
+  indicatorType: IndicatorType.bottomCenter,
+  onChange: (position) => {
+    //页面改变回调
+  }
+})
 
 
 ```
@@ -129,21 +129,21 @@ Banner({
 
 ```typescript
           Banner({
-            data: ["1", "2", "3", "4", "5", "6"],
-            itemPage: this.itemMarginPage,
-            nextMargin: 20,
-            prevMargin: 20,
-            itemSpace: 10, //子组件边距
-            onChange: (position) => {
-              console.log("=========" + position)
-            }
-          }).margin({ top: 20 })
+  data: ["1", "2", "3", "4", "5", "6"],
+  itemPage: this.itemMarginPage,
+  nextMargin: 20,
+  prevMargin: 20,
+  itemSpace: 10, //子组件边距
+  onChange: (position) => {
+    console.log("=========" + position)
+  }
+}).margin({ top: 20 })
 ```
 
 ### 6、左右显示，有缩放效果
 
 ```typescript
-         Banner({
+ Banner({
   data: ["1", "2", "3", "4", "5", "6"],
   itemPage: this.itemMarginPage,
   nextMargin: 20,
@@ -156,7 +156,6 @@ Banner({
   }
 }).margin({ top: 20 })
 ```
-
 
 ### 7、相关属性
 
@@ -204,7 +203,6 @@ Banner({
 
 定义DataController全局变量，并传入轮播组件。
 
-
 ```typescripty
 
 dataController: DataController = new DataController() //数据控制器
@@ -223,6 +221,8 @@ Banner({
 相关方法如下,支持任意类型数据，如下我定义的是number
 
 ```typescript
+//初始化数据
+this.dataController.init()
  //增加一个数据
 this.dataController.add(100)
 //指定位置增加一个数据
@@ -245,7 +245,6 @@ this.dataController.change(6, 1000)
 
 ##### DataController方法介绍
 
-
 | 方法          | 参数                               | 概述                    |
 |-------------|----------------------------------|-----------------------|
 | add         | (item: Object )                  | 可传递任意类型，用于添加单条数据      |
@@ -261,22 +260,16 @@ this.dataController.change(6, 1000)
 | getData     | (index: number)                  | 返回某一条数据               |
 | totalCount  | 无参                               | 返回数据数量（返回值number      |
 
-
 #### 懒加载数据列表操作
 
 定义BannerDataSource全局变量，并传入轮播组件之中。
-
 
 ```typescript
 dataSource: BannerDataSource = new BannerDataSource() //数据懒加载操作对象，执行数据增删改查
 
 Banner({
-  data: this.items,
   itemPage: this.itemPage,
-  isLazyData: true,
-  onLazyDataSource: (dataSource: BannerDataSource) => {
-    this.dataSource = dataSource
-  },
+  dataSource: this.dataSource,
   onChange: (position) => {
     //页面改变
   }
@@ -309,7 +302,6 @@ this.dataSource.changeData(3, 9999)
 
 ##### BannerDataSource方法介绍
 
-
 | 方法               | 参数                               | 概述                    |
 |------------------|----------------------------------|-----------------------|
 | pushData         | (item: Object )                  | 可传递任意类型，用于添加单条数据      |
@@ -335,28 +327,7 @@ this.dataSource.changeData(3, 9999)
 
 <p><img src="https://vipandroid-image.oss-cn-beijing.aliyuncs.com/harmony/abner.jpg" width="150px" /></p>
 
-
 [鸿蒙精华技术文章列表](https://juejin.cn/column/7269566781248389178)
-
-## 一对一指导【收费】
-
-每个人的时间都是宝贵的，做为开发者的我，已经做到了技术上的免费开源，但仍然有很多问题无法做到及时处理。
-也考虑到，鸿蒙是一个新的系统，大家在使用上会遇到各种各样的问题，也为了能够及时的解决及回复问题，大家可以付费进行一对一指导。
-
-### 开源库使用指导
-
-<p><img src="https://vipandroid-image.oss-cn-beijing.aliyuncs.com/harmony/h_github_9.png" width="150px" /></p>
-
-**重要信息：一定要在付款时备注您的微信号，我会主动加您！切记！切记！！切记！！！**
-**诚信经营，来自一个北漂的老程序员心声！**
-
-**一杯饮料的钱，您可以获取权益如下**
-
-- 1、针对Banner库使用1对1辅导使用，并跟踪相关问题排查。
-- 2、针对我的所有鸿蒙开源库，1对1辅导使用，并跟踪相关问题排查。
-- 3、涉及到我的开源库，您提的业务需求，率先第一时间满足，并及时针对性开发。
-- 4、未来我的鸿蒙开源库，可先遣体验。
-- 5、鸿蒙脚手架，正在研发中，可首批次体验使用。
 
 ## License
 

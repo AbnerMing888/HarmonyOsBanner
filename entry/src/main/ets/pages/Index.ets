@@ -50,6 +50,7 @@ struct Index {
   build() {
     Column() {
       ActionBar({ title: "轮播图", hiddenBack: true, hiddenRight: false })
+
       Scroll() {
         Column() {
           // 左右显示，两边缩小，滑动到中间变大
