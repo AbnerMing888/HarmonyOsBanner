@@ -3,7 +3,8 @@
 <img src="https://vipandroid-image.oss-cn-beijing.aliyuncs.com/harmony/abner.jpg" width="100px" /><br/>
 <span style="font-size:12px;color:red;">扫码关注，千帆起航，共筑鸿蒙！</span>
 </p>
-HarmonyOsBanner是一个基于系统Api的Swiper而封装的一个轮播图，旨在简化代码，扩展相关功能，使用非常简单！
+
+banner是一个基于系统Swiper而封装的一个轮播图，旨在简化代码，扩展相关功能，使用非常简单！
 
 主要功能点如下
 
@@ -11,20 +12,39 @@ HarmonyOsBanner是一个基于系统Api的Swiper而封装的一个轮播图，�
 - 2、**支持线条指示器**
 - 3、**支持系统常见的圆点、圆柱、文字等指示器**
 - 4、**支持懒加载数据便捷调用**
+- 5、**支持堆叠形式轮播图**
+- 6、**支持轮播图进度自动指示器（仿短视频图片轮播）**
 
 <p align="center">
 <img src="https://vipandroid-image.oss-cn-beijing.aliyuncs.com/harmony/banner/banner_24_730.png" width="200px" />
 </p>
 
+<p align="center">
+<img src="https://vipandroid-image.oss-cn-beijing.aliyuncs.com/harmony/banner/banner_003.jpg" width="300px" />
+</p>
+
+### 堆叠轮播图
+
+<p align="center">
+<img src="https://vipandroid-image.oss-cn-beijing.aliyuncs.com/harmony/banner/banner_001.gif" width="300px" />
+</p>
+
+### 进度自动指示器
+
+<p align="center">
+<img src="https://vipandroid-image.oss-cn-beijing.aliyuncs.com/harmony/banner/banner_002.gif" width="300px" />
+</p>
+
 ## 支持Api
 
-Api版本：**>12**
+Api版本：**>=12**
+
 
 ## 快速使用
 
 目前有多种使用方式，比如远程依赖、本地静态共享包依赖,源码方式依赖，推荐使用**远程依赖**，方便快捷，有最新修改可以及时生效。
 
-### 1、远程依赖方式使用【推荐】
+### 1、依赖方式使用
 
 方式一：在Terminal窗口中，执行如下命令安装三方包，DevEco Studio会自动在工程的oh-package.json5中自动添加三方包依赖。
 
@@ -32,25 +52,16 @@ Api版本：**>12**
 ohpm install @abner/banner
 ```
 
-方式二：在工程的oh-package.json5中设置三方包依赖，配置示例如下：
+方式二：在需要的模块中的oh-package.json5中设置三方包依赖，配置示例如下：
 
 ```
-"dependencies": { "@abner/banner": "^1.0.6"}
+"dependencies": { "@abner/banner": "^1.0.7"}
 ```
 
 <p align="center"><img src="https://vipandroid-image.oss-cn-beijing.aliyuncs.com/harmony/banner/banner_243_001.jpg" width="300"></p>
 
-### 2、本地静态共享包har包使用
 
-<p>首先，下载har包，<a href="https://vipandroid-image.oss-cn-beijing.aliyuncs.com/harmony/banner/banner-1.0.2.har">点击下载</a></p>
-<p>下载之后，把har包复制项目中，目录自己创建，如下，我创建了一个libs目录，复制进去</p>
-<p><img src="https://vipandroid-image.oss-cn-beijing.aliyuncs.com/harmony/banner/banner_243_002.jpg"></p>
-<p>引入之后，进行同步项目，点击Sync Now即可，当然了你也可以，将鼠标放置在报错处会出现提示，在提示框中点击Run 'ohpm install'。</p>
-<p>需要注意，<strong>@abner/banner</strong>，是用来区分目录的，可以自己定义，比如@aa/bb等，关于静态共享包的创建和使用，请查看如下我的介绍，这里就不过多介绍</p>
-
-[HarmonyOS开发：走进静态共享包的依赖与使用](https://juejin.cn/post/7274982412245876776)
-
-### 3、查看是否引用成功
+### 2、查看是否引用成功
 
 无论使用哪种方式进行依赖，最终都会在使用的模块中，生成一个oh_modules文件，并创建源代码文件，有则成功，无则失败，如下：
 
@@ -58,26 +69,110 @@ ohpm install @abner/banner
 
 ## 基本使用
 
-### 1、普通使用
+### 1、中间放大，两边缩小效果
+
+测试视图
 
 ```typescript
+@Builder
+itemMarginPage(index: number, item: Object) {
+  Column() {
+    Text("item" + index)
+  }
+  .width("100%")
+    .height("100%")
+    .backgroundColor(Color.Pink)
+    .justifyContent(FlexAlign.Center)
+    .borderRadius(10)
+}
+```
+
+组件使用
+
+```typescript
+
 Banner({
-  data: ["1", "2", "3", "4", "5", "6"], //数据源，任意类型
-  itemPage: this.itemPage, //轮播组件 @Builder
+  data: ["1", "2", "3", "4", "5", "6"],
+  itemPage: this.itemMarginPage,//子组件视图
+  nextMargin: 20,
+  prevMargin: 20,
+  itemSpace: 10, //子组件之间的边距
+  isLeftRightScale: true,//左右是否放大
   onChange: (position) => {
-    //页面改变回调
+    console.log("=========" + position)
   }
 })
 ```
 
-### 2、圆点指示器
+### 2、堆叠轮播图
 
 ```typescript
-Banner({
-  data: ["1", "2", "3", "4", "5", "6"], //数据源，任意类型
-  itemPage: this.itemPage, //轮播组件 @Builder
+BannerStack({
+  data: ["1", "2", "3", "4", "5", "6"],
+  itemPage: (index: number, item: Object) => {
+    this.itemStackPage(index, item)
+  },
   onChange: (position) => {
-    //页面改变回调
+    console.log("=========" + position)
+  },
+})
+```
+
+### 3、普通轮播图
+
+```typescript
+ Banner({
+  data: ["1", "2", "3", "4", "5", "6"],
+  itemPage: this.itemPage,
+  onChange: (position) => {
+    console.log("=========" + position)
+  }
+})
+```
+
+### 4、指示器在底部
+
+测试视图
+
+```typescript
+@Builder
+  bottomItemPage(index: number, _: Object) {
+    Column() {
+      Column() {
+        Text("item" + index)
+      }
+      .backgroundColor(Color.Pink)
+      .justifyContent(FlexAlign.Center)
+      .borderRadius(10)
+      .width("100%")
+      .height(120)
+
+      Column().height(30)
+    }.margin({ left: 20, right: 20 })
+  }
+```
+
+组件使用
+
+```typescript
+ Banner({
+  data: ["1", "2", "3", "4", "5", "6"],
+  itemPage: this.bottomItemPage,
+  bannerHeight: 150,
+  onChange: (position) => {
+    console.log("=========" + position)
+  }
+})
+```
+
+### 5、圆点指示器
+
+```typescript
+ Banner({
+  data: ["1", "2", "3", "4", "5", "6"],
+  itemPage: this.itemPage,
+  onChange: (position) => {
+    console.log("=========" + position)
   },
   indicator: new DotIndicator()
     .itemWidth(8)
@@ -89,14 +184,14 @@ Banner({
 })
 ```
 
-### 3、文字指示器
+### 6、数字指示器
 
 ```typescript
-Banner({
-  data: ["1", "2", "3", "4", "5", "6"], //数据源，任意类型
-  itemPage: this.itemPage, //轮播组件 @Builder
+  Banner({
+  data: ["1", "2", "3", "4", "5", "6"],
+  itemPage: this.itemPage,
   onChange: (position) => {
-    //页面改变回调
+    console.log("=========" + position)
   },
   indicator: Indicator.digit()// 设置数字导航点样式
     .right("43%")
@@ -107,88 +202,141 @@ Banner({
     .selectedDigitFont({ size: 16, weight: FontWeight.Normal })
 })
 ```
-
-### 4、线条指示器
+### 7、线条指示器
 
 ```typescript
 Banner({
-  data: ["1", "2", "3", "4", "5", "6"], //数据源，任意类型
-  itemPage: this.itemPage, //轮播组件 @Builder
-  isLineIndicator: true,
-  lineMargin: { bottom: 10, left: 10 },
-  indicatorType: IndicatorType.bottomCenter,
-  onChange: (position) => {
-    //页面改变回调
-  }
-})
-
-
+            data: ["1", "2", "3", "4", "5", "6"],
+            itemPage: this.itemPage,
+            isLineIndicator: true,
+            showLineIndicator: true,
+            onChange: (position) => {
+              console.log("=========" + position)
+            },
+            lineMargin: { bottom: 10 },
+          }).margin({ top: 20 })
 ```
 
-### 5、左右显示，无缩放效果
+### 8、进度自动指示器（防短视频图片轮播）
 
 ```typescript
-          Banner({
-  data: ["1", "2", "3", "4", "5", "6"],
-  itemPage: this.itemMarginPage,
-  nextMargin: 20,
-  prevMargin: 20,
-  itemSpace: 10, //子组件边距
-  onChange: (position) => {
-    console.log("=========" + position)
+@Component
+export struct BannerProgressPage {
+  swiperController: SwiperController = new SwiperController()
+  @State isBannerScroll: boolean = false
+  @State currentIndex: number = 0
+  @State bannerData: ResourceStr[] = [
+    $r("app.media.banner_001"),
+    $r("app.media.banner_002"),
+    $r("app.media.banner_003")
+  ]
+
+  @Builder
+  itemPage(index: number, item: ResourceStr) {
+    Image(item)
+      .width("100%")
   }
-}).margin({ top: 20 })
+
+  build() {
+    RelativeContainer() {
+      Banner({
+        data: this.bannerData,
+        indicator: false, //去掉自带的指示器
+        swiperController: this.swiperController,
+        onBannerScroll: (isStart) => {
+          //是否滑动了
+          this.isBannerScroll = isStart
+        },
+        onChange: (index) => {
+          this.currentIndex = index
+        },
+        itemPage: (index: number, item: Object) => {
+          this.itemPage(index, item as ResourceStr)
+        }
+      })
+        .alignRules({
+          center: { anchor: '__container__', align: VerticalAlign.Center },
+          middle: { anchor: '__container__', align: HorizontalAlign.Center }
+        })
+
+      BannerProgressIndicator({
+        progressSize: this.bannerData.length,
+        progressWidth: "30%",
+        isBannerScroll: this.isBannerScroll,
+        currentIndex: this.currentIndex,
+        onChange: () => {
+          this.swiperController.showNext()
+        }
+      })
+        .alignRules({
+          bottom: { anchor: '__container__', align: VerticalAlign.Bottom },
+          middle: { anchor: '__container__', align: HorizontalAlign.Center }
+        }).margin({ bottom: 100 })
+    }
+    .height('100%')
+    .width('100%')
+    .backgroundColor(Color.Black)
+  }
+}
 ```
 
-### 6、左右显示，有缩放效果
+### 8、相关属性
 
-```typescript
- Banner({
-  data: ["1", "2", "3", "4", "5", "6"],
-  itemPage: this.itemMarginPage,
-  nextMargin: 20,
-  prevMargin: 20,
-  itemSpace: 10, //子组件边距
-  isLeftRightScale: true,
-  onChange: (position) => {
-    this.selectPosition = position
-    console.log("=========" + position)
-  }
-}).margin({ top: 20 })
-```
+| 属性                   | 类型                                             | 概述                             |
+|----------------------|------------------------------------------------|--------------------------------|
+| data                 | Array<Object>                                  | 数据源                            |
+| itemPage             | 回调方法BuilderParam (index: number, item: Object) | tab对应的页面                       |
+| onChange             | 回调方法(position: number)                         | 页面改变监听                         |
+| bannerHeight         | Length                                         | banner高度                       |
+| bannerWidth          | Length                                         | banner宽度                       |
+| autoPlay             | boolean                                        | 是否自动播放，默认false                 |
+| interval             | number                                         | 轮播时间，默认3秒轮播一次                  |
+| disableSwipe         | boolean                                        | 是否禁止滑动，默认fasle                 |
+| itemSpace            | number                                         | 子组件之间的间隙                       |
+| currentIndex         | number                                         | 索引                             |
+| indicator            | DotIndicator / DigitIndicator/ boolean         | 指示器                            |
+| isLineIndicator      | boolean                                        | 是否是自定义的线条指示器                   |
+| indicatorType        | IndicatorType                                  | 设置线条指示器时的位置，默认底部居中             |
+| lineIndicatorWidth   | number                                         | 设置线条指示器时的线条宽度                  |
+| lineIndicatorHeight  | number                                         | 设置线条指示器时的线条高度                  |
+| lineIndicatorBgColor | ResourceColor                                  | 设置线条指示器时的背景                    |
+| lineMargin           | Margin / Length                                | 设置线条指示器时的线条边距                  |
+| isLoop               | boolean                                        | 是否开启循环,默认是循环                   |
+| customIndicator      | BuilderParam(index: number, item: Object)      | 自定义轮播指示器                       |
+| dataSource           | BannerDataSource                               | 是否使用数据懒加载，设置即为懒加载，默认为undefined |
+| lazyCachedCount      | number                                         | 默认懒加载缓存数量                      |
+| dataController       | DataController                                 | 普通数据操作控制器，和懒加载二者选其一            |
+| prevMargin           | Length                                         | 前边距，用于露出前一项的一小部分               |
+| nextMargin           | Length                                         | 后边距，用于露出后一项的一小部分               |
+| isLeftRightScale     | boolean                                        | 左右是否缩放                         |
+| maxScale             | number                                         | 设置左右缩放时，最大放大系数，默认为1            |
+| minScale             | number                                         | 设置左右缩放时，最小缩放系数，默认为0.8          |
+| onBannerScroll       | (isStart: boolean) => void = undefined         | 监听滑动状态                         |
 
-### 7、相关属性
+### 9、堆叠轮播图属性
 
-| 属性                   | 类型                                                 | 概述                    |
-|----------------------|----------------------------------------------------|-----------------------|
-| data                 | Array<BannerData>                                  | 数据源                   |
-| itemPage             | 回调方法BuilderParam (index: number, item: BannerData) | tab对应的页面              |
-| onChange             | 回调方法(position: number)                             | 页面改变                  |
-| bannerHeight         | Length                                             | banner高度              |
-| bannerWidth          | Length                                             | banner宽度              |
-| autoPlay             | boolean                                            | 是否自动播放，默认false        |
-| interval             | number                                             | 默认3秒轮播一次              |
-| disableSwipe         | boolean                                            | 是否禁止滑动                |
-| itemSpace            | number                                             | 子组件之间的间隙              |
-| currentIndex         | number                                             | 索引                    |
-| indicator            | DotIndicator / DigitIndicator/ boolean             | 指示器                   |
-| isLineIndicator      | boolean                                            | 是否是自定义的线条指示器          |
-| indicatorType        | IndicatorType                                      | 默认底部居中                |
-| lineIndicatorWidth   | number                                             | 线条宽度                  |
-| lineIndicatorHeight  | number                                             | 线条高度                  |
-| lineIndicatorBgColor | ResourceColor                                      | 指示器背景                 |
-| lineMargin           | Margin / Length                                    | 线条边距                  |
-| isLoop               | boolean                                            | 是否开启循环,默认是循环          |
-| customIndicator      | BuilderParam(index: number, item: Object)          | 自定义轮播指示器              |
-| isLazyData           | boolean                                            | 是否使用数据懒加载，默认false,不使用 |
-| lazyCachedCount      | number                                             | 默认懒加载缓存数量             |
-| onLazyDataSource     | (dataSource: BannerDataSource)                     | 懒加载数据操作对象回调           |
-| dataController       | DataController                                     | 普通数据操作控制器，和懒加载二者选其一   |
-| prevMargin           | Length                                             | 前边距，用于露出前一项的一小部分      |
-| nextMargin           | Length                                             | 后边距，用于露出后一项的一小部分      |
-| isLeftRightScale     | boolean                                            | 左右是否缩放                |
 
-### 6、轮播图数据操作（增删改查）
+| 属性                | 类型                                             | 概述                  |
+|-------------------|------------------------------------------------|---------------------|
+| data              | Array<Object>                                  | 数据源                 |
+| itemPage          | 回调方法BuilderParam (index: number, item: Object) | tab对应的页面            |
+| onChange          | 回调方法(position: number)                         | 页面改变监听              |
+| bannerHeight      | Length                                         | banner高度            |
+| bannerWidth       | Length                                         | banner宽度            |
+| autoPlay          | boolean                                        | 是否自动播放，默认false      |
+| interval          | number                                         | 轮播时间，默认3秒轮播一次       |
+| onChange          | 回调方法(position: number)                         | 页面改变监听              |
+| maxScale          | number                                         | 最大缩放系数，默认为1，最顶部视图   |
+| minScale          | number                                         | 最小缩放系数，默认为0.8，最底部视图 |
+| middleScale       | number                                         | 中间缩放系数，默认为0.9，中间视图  |
+| maxOffset         | number                                         | 最大偏移量，默认为20，最顶部视图   |
+| minOffset         | number                                         | 最小偏移量，默认为0，最底部视图    |
+| middleOffset      | number                                         | 中间偏移量，默认为10，中间视图    |
+| animationDuration | number                                         | 动画时长                |
+| paddingLeft       | number                                         | 内边距距离左边             |
+| paddingRight      | number                                         | 内边距距离右边             |
+
+### 10、轮播图数据操作（增删改查）
 
 【Demo案例可直接查看DataBannerPage和LazyBannerPage两个页面】
 
@@ -208,7 +356,6 @@ Banner({
 dataController: DataController = new DataController() //数据控制器
 
 Banner({
-        data: this.items,//数据源，任意类型
         dataController: this.dataController,
         itemPage: this.itemPage,
         onChange: (position) => {
@@ -224,12 +371,12 @@ Banner({
 //初始化数据
 this.dataController.init()
  //增加一个数据
-this.dataController.add(100)
+ this.dataController.add(100)
 //指定位置增加一个数据
 this.dataController.addPosition(2, 999)
 //数组添加
-this.dataController.addArray([200, 300, 400])
-//可变参数形式添加
+ this.dataController.addArray([200, 300, 400])
+ //可变参数形式添加
 this.dataController.addVariable(600, 700)
 //删除第一个
 this.dataController.deleteFirst()
@@ -244,6 +391,7 @@ this.dataController.change(6, 1000)
 ```
 
 ##### DataController方法介绍
+
 
 | 方法          | 参数                               | 概述                    |
 |-------------|----------------------------------|-----------------------|
@@ -260,9 +408,11 @@ this.dataController.change(6, 1000)
 | getData     | (index: number)                  | 返回某一条数据               |
 | totalCount  | 无参                               | 返回数据数量（返回值number      |
 
+
 #### 懒加载数据列表操作
 
 定义BannerDataSource全局变量，并传入轮播组件之中。
+
 
 ```typescript
 dataSource: BannerDataSource = new BannerDataSource() //数据懒加载操作对象，执行数据增删改查
@@ -286,21 +436,22 @@ this.dataSource.pushData(100)
 this.dataSource.pushDataPosition(2, 200)
 //数组添加
 this.dataSource.pushDataArray([300, 301, 302])
-//可变参数形式添加
+ //可变参数形式添加
 this.dataSource.pushDataVariable(400, 401, 402)
-//删除第一个
+ //删除第一个
 this.dataSource.deleteFirst()
-//删除最后一个
+ //删除最后一个
 this.dataSource.deleteLast()
 //删除指定一个
 this.dataSource.deleteData(2)
-//删除全部
+ //删除全部
 this.dataSource.deleteAll()
 //修改数据
 this.dataSource.changeData(3, 9999)
 ```
 
 ##### BannerDataSource方法介绍
+
 
 | 方法               | 参数                               | 概述                    |
 |------------------|----------------------------------|-----------------------|
@@ -316,6 +467,7 @@ this.dataSource.changeData(3, 9999)
 | getDataAll       | 无参                               | 返回所有的数据 （返回值Object[]） |
 | getData          | (index: number)                  | 返回某一条数据               |
 | totalCount       | 无参                               | 返回数据数量（返回值number      |
+
 
 ## 更多案例
 
